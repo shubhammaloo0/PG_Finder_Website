@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>contact us</title>
+    <!-- <link href="contactusstyle.css" rel="stylesheet"> -->
+    <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa ;
+    background: url('image/light_background-wallpaper-2048x1152.jpg') center/cover no-repeat fixed;
+    margin: -20px;
+}
+
+.first_col {
+    background-color: white;
+    height: 550px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: relative;
+    width: 550px;
+    left: 155px;
+    top: 171px;
+    border-radius: 20px;
+}
+
+.img-fluid {
+    border-radius: 20px;
+}
+
+.row-last {
+    width: 60% !important;
+    position: relative !important;
+    left: 350px;
+    top: 50px;
+    height: 150px;
+    padding-bottom: 100px !important;
+    background-color: rgb(74, 166, 242);
+    border-radius: 20px;
+
+}
+
+
+.btn-primary {
+    background-color: rgb(74, 166, 242);
+    border: #c1b688;
+
+}
+
+.btn-primary:hover {
+    background-color: black !important;
+}
+
+.form-control {
+    height: 52px;
+    background: #fff;
+    font-size: 14px;
+    border-radius: 2px;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #c1b688;
+}
+.form-control[type=text]:focus {
+border: 2px solid #555;
+}
+@media only screen and (max-width: 600px) {
+    .first_col {
+        position: initial;
+        left: 0 !important;
+    }
+
+    .sec_col {
+        order: 1 !important;
+    }
+
+    .row-last {
+        left: 0 !important;
+        width: 100% !important;
+        height: 500px !important;
+        top: 0 !important;
+    }
+}
+
+    </style>
+ 
+</head>
+
+<body>
+    <div class="bg-background"></div>
+    <div class="container py-5">
+        <div class="row py-5 g-3">
+
+            <div class="col-md-6 first_col ">
+                <h1 class="text-center mt-3">Contact Us</h1>
+                <form id="contact-form" class="p-4">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Enter your Name</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Email ID</label>
+                        <input type="text" class="form-control" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Enter your message</label>
+                        <textarea  type="text" class="form-control" id="message" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <button id="submit-btn" class="btn btn-primary">Send Now</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 sec_col">
+                <img src="image\contact.jpg"
+                    class="img-fluid">
+            </div>
+        </div>
+        <div class="row-last">
+            <div class="row row-cols-1 row-cols-md-3  p-3 text-white">
+                <div class="col">
+                    <h5>CALL US</h5>
+                    <p><h6>Mobile No : 6291366756</h6></p>
+                </div>
+                <div class="col">
+                    <h5>LOCATION</h5>
+                    <p><h6>BMS College of Engineering.</h6></p>
+                </div>
+                <div class="col">
+                    <h5>Email</h5>
+                    <p><h6>shubham.ci22@bmsce.ac.in <br>tanya.ec22@bmsce.ac.in <br>vagisha.ec22@bmsce.ac.in </h6></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+
+                // Send form data to server
+                fetch('http://localhost:5000/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, message })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Message sent successfully');
+                        // You can handle success actions here
+                        form.reset();
+                    } else {
+                        console.error('Failed to send message');
+                        // You can handle failure actions here
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                    // You can handle error actions here
+                });
+            });
+        });
+
+    </script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
+    
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <style>
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            background: url('image/light_background-wallpaper-2048x1152.jpg') center/cover no-repeat fixed;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            /* max-height: 90vh; */
+            overflow-y: auto;
+            width: 30%;
+             /* margin: 15px 0;Added top and bottom margin */
+            margin-top: 15px;
+        }
+
+        #pgForm {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: 100%;
+        }
+
+
+
+       /* body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            background: url('image/light_background-wallpaper-2048x1152.jpg') center/cover no-repeat fixed;
+            position: relative; 
+        } */
+
+        /* .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255);
+            z-index: -1; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        } */
+
+        #pg-details {
+            text-align: center;
+            margin-bottom: 20px;
+            z-index: 2; /* Ensure the content appears on top of the overlay */
+        }
+
+        #pg-details img {
+            width: 70%;
+            max-width: 400px; /* Limit maximum width */
+            height: 300px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        #email-form {
+            text-align: center;
+            margin: 0 auto;
+            width: 80%;
+            max-width: 400px; /* Limit maximum width */
+            z-index: 2; /* Ensure the content appears on top of the overlay */
+        }
+
+        #email-form label,
+        #email-form input,
+        #email-form button {
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        #email {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #confirm-button {
+    
+            background: linear-gradient(to right,rgb(173, 145, 211), rgb(74, 166, 242));
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #confirm-button:hover {
+            background: linear-gradient(to right,rgb(168, 152, 189), rgb(51, 151, 234));
+        }
+    </style>
+</head>
+<body>
+
+     <!-- Overlay div for background blur -->
+     <!-- <div class="overlay"></div> -->
+<div id="container">
+    <div id="pgForm">
+    <div id="pg-details">
+        <!-- PG details will be displayed here -->
+    </div>
+
+    <form id="email-form">
+        <label for="email">Enter your Email id:</label>
+        <input type="email" id="email" required>
+        <button id="confirm-button" type="button">Confirm</button>
+    </form>
+</div>
+</div>
+
+    <script>
+      // Function to send form data to the server
+async function sendFormDataToServer(email, pgDetails) {
+    try {
+        // Include pgName, accommodation, and email in the pgDetails object
+        const dataToSend = {
+            pgName: pgDetails.name,
+            accommodation: pgDetails.type,
+            email: email,
+            ...pgDetails // Spread the rest of the pgDetails object
+        };
+
+        const response = await fetch('http://localhost:5000/booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend) // Send the complete PG detail object
+        });
+        if (response.ok) {
+            console.log('Form data stored successfully on the server.');
+            alert('Booking Successful');
+            // Redirect the user to the previous page
+            window.history.back();
+        } else {
+            console.error('Failed to store form data on the server.');
+        }
+    } catch (error) {
+        console.error('Error storing form data on the server:', error);
+    }
+}
+
+// Retrieve selected PG details from localStorage
+const selectedPG = JSON.parse(localStorage.getItem('selectedPG'));
+
+
+        // Handle confirm button click
+        const confirmButton = document.getElementById('confirm-button');
+        confirmButton.addEventListener('click', function() {
+            const userEmail = document.getElementById('email').value;
+            if (selectedPG) {
+                sendFormDataToServer(userEmail, selectedPG);
+            } else {
+                console.error('No PG details found to store.');
+            }
+        });
+
+        // Display selected PG details if available
+        if (selectedPG) {
+            const pgDetailsContainer = document.getElementById('pg-details');
+            pgDetailsContainer.innerHTML = `
+                <h2>${selectedPG.name}</h2>
+                <img src="${selectedPG.image}" alt="${selectedPG.name}">
+                <p>Type: ${selectedPG.type}</p>
+                <p>Price: Rs.${selectedPG.price}</p>
+                <p>Location: ${selectedPG.location}</p>
+                <p>Amenities: ${selectedPG.amenities.join(', ')}</p>
+                <p>Preferred: ${selectedPG.preferred}</p>
+                <p>Food: ${selectedPG.food}</p>
+            `;
+        } else {
+            // Display a message if selectedPG is not available
+            const pgDetailsContainer = document.getElementById('pg-details');
+            pgDetailsContainer.innerHTML = '<p>No PG details found.</p>';
+        }
+
+    
+    </script>
+</body>
+</html>

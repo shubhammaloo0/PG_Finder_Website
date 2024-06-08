@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student's Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: space-between;
+            background: url('image/light_background-wallpaper-2048x1152.jpg') center/cover no-repeat fixed;
+        }
+        
+
+        #filter-section {
+            background-color: #fff;
+            width: 19%;
+            padding: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        #pg-listing-section {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding-left: 1em;
+            padding-right: 1em;
+            overflow-y: auto;
+            width: 80%;
+            margin-left: 20%;
+        }
+
+        .filter-group {
+            margin-bottom: 1em;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .pg-item {
+            background-color: #fff;
+            width: 30%;
+            padding: 1em;
+            margin-bottom: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            position: relative;
+            height: 43rem;
+        }
+
+        .pg-item img {
+            width: 100%;
+            height: 350px; /* Set a fixed height for the images */
+            object-fit: cover; /* Maintain aspect ratio while filling the box */
+            border-radius: 4px;
+            margin-bottom: 1em;
+        }
+
+        .book-button {
+            position: relative;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right,rgb(173, 145, 211), rgb(74, 166, 242));
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 30%;
+        }
+
+        .book-button:hover {
+            background: linear-gradient(to right,rgb(168, 152, 189), rgb(51, 151, 234));
+        }
+    </style>
+</head>
+<body>
+    <div id="filter-section">
+        <div class="filter-group">
+            <label for="accommodation-type">Accommodation Type:</label>
+            <select id="accommodation-type">
+                <option value="all">All</option>
+                <option value="single">Single Sharing</option>
+                <option value="double">Double Sharing</option>
+                <option value="triple">Triple Sharing</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="price">Price:</label>
+            <select id="price">
+                <option value="all">All</option>
+                <option value="low-to-high">Low to High</option>
+                <option value="high-to-low">High to Low</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="location">Location:</label>
+            <select id="location">
+                <option value="all">All</option>
+                <option value="BMSCE">BMSCE</option>
+                <option value="MSRIT">MSRIT</option>
+                <option value="RVCE">RVCE</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="amenities">Amenities:</label>
+            <select id="amenities">
+                <option value="all">All</option>
+                <option value="ac">AC</option>
+                <option value="washing-machine">Washing Machine</option>
+                <option value="water-purifier">Water Purifier</option>
+                <option value="geyser">Geyser</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="preferred">Preferred:</label>
+            <select id="preferred">
+                <option value="all">All</option>
+                <option value="boys">Boys Only</option>
+                <option value="girls">Girls Only</option>
+                <option value="coed">Coed</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="food">Food:</label>
+            <select id="food">
+                <option value="all">All</option>
+                <option value="with-food">With Food</option>
+                <option value="without-food">Without Food</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="pg-listing-section">
+        <!-- PG listings will be displayed here -->
+    </div>
+
+    <script>
+        // Sample PG data (replace with your data)
+        const pgData = [
+            { name: 'Stanza Living 1', type: 'single', price: 16000, location: 'BMSCE', amenities: ['ac', 'washing-machine'], preferred: 'boys', food: 'with-food', image: 'pgimage\\single1.webp' },
+            { name: 'Lakshmi PG', type: 'double', price: 10000, location: 'BMSCE', amenities: ['water-purifier', 'geyser'], preferred: 'girls', food: 'without-food', image: 'pgimage\\double1.jpg' },
+            { name: 'Blue Flame PG', type: 'triple', price: 9000, location: 'MSRIT', amenities: ['ac', 'geyser'], preferred: 'coed', food: 'with-food', image: 'pgimage\\triple1.webp' },
+            { name: 'Hari PG', type: 'single', price: 13000, location: 'BMSCE', amenities: ['ac', 'washing-machine'], preferred: 'boys', food: 'with-food', image: 'pgimage\\single2.webp' },
+            { name: 'Stanza Living 2', type: 'double', price: 11000, location: 'BMSCE', amenities: ['water-purifier', 'geyser'], preferred: 'girls', food: 'without-food', image: 'pgimage\\double2.avif' },
+            { name: 'Nested PG', type: 'triple', price: 10000, location: 'MSRIT', amenities: ['ac', 'geyser'], preferred: 'coed', food: 'with-food', image: 'pgimage\\triple2.webp' },
+            { name: 'Uday PG', type: 'single', price: 11000, location: 'RVCE', amenities: ['ac', 'water-purifier'], preferred: 'boys', food: 'without-food', image: 'pgimage\\single3.avif' },
+            { name: 'SG PG', type: 'double', price: 10000, location: 'MSRIT', amenities: ['washing-machine', 'geyser'], preferred: 'girls', food: 'with-food', image: 'pgimage\\double3.webp' },
+            { name: 'Aya House 1', type: 'triple', price: 6000, location: 'BMSCE', amenities: ['ac', 'washing-machine'], preferred: 'coed', food: 'without-food', image: 'pgimage\\triple3.jpg' },
+            { name: 'Donne PG', type: 'single', price: 18000, location: 'RVCE', amenities: ['water-purifier', 'geyser'], preferred: 'boys', food: 'with-food', image: 'pgimage\\single4.avif' },
+            { name: 'Arya House 2', type: 'double', price: 10000, location: 'MSRIT', amenities: ['ac', 'washing-machine'], preferred: 'girls', food: 'without-food', image: 'pgimage\\double4.jpg' },
+            { name: 'Stanza Living 3', type: 'triple', price: 11000, location: 'BMSCE', amenities: ['geyser', 'water-purifier'], preferred: 'coed', food: 'with-food', image: 'pgimage\\triple4.jpg' },
+            // Add more data as needed
+        ];
+
+        const accommodationTypeFilter = document.getElementById('accommodation-type');
+        const priceFilter = document.getElementById('price');
+        const locationFilter = document.getElementById('location');
+        const amenitiesFilter = document.getElementById('amenities');
+        const preferredFilter = document.getElementById('preferred');
+        const foodFilter = document.getElementById('food');
+        const pgListingSection = document.getElementById('pg-listing-section');
+
+        function renderPGListings() {
+            // Clear existing PG listings
+            pgListingSection.innerHTML = '';
+
+            // Apply filters
+            const filteredData = pgData.filter(pg => (
+                (accommodationTypeFilter.value === 'all' || pg.type === accommodationTypeFilter.value) &&
+                (priceFilter.value === 'all' || 
+                 (priceFilter.value === 'low-to-high' && pg.price >= 0) || 
+                 (priceFilter.value === 'high-to-low' && pg.price < Infinity)) &&
+                (locationFilter.value === 'all' || pg.location === locationFilter.value) &&
+                (amenitiesFilter.value === 'all' || pg.amenities.includes(amenitiesFilter.value)) &&
+                (preferredFilter.value === 'all' || pg.preferred === preferredFilter.value) &&
+                (foodFilter.value === 'all' || pg.food === foodFilter.value)
+            ));
+
+            // Sort data based on selected price filter
+            if (priceFilter.value === 'low-to-high') {
+                filteredData.sort((a, b) => a.price - b.price);
+            } else if (priceFilter.value === 'high-to-low') {
+                filteredData.sort((a, b) => b.price - a.price);
+            }
+
+            // Display filtered and sorted PG listings
+            filteredData.forEach(pg => {
+                const pgItem = document.createElement('div');
+                pgItem.classList.add('pg-item');
+                pgItem.innerHTML = `<h3>${pg.name}</h3>
+                                  <img src="${pg.image}" alt="${pg.name}">
+                                  <p>Type: ${pg.type}</p>
+                                  <p>Price: Rs.${pg.price}</p>
+                                  <p>Location: ${pg.location}</p>
+                                  <p>Amenities: ${pg.amenities.join(', ')}</p>
+                                  <p>Preferred: ${pg.preferred}</p>
+                                  <p>Food: ${pg.food}</p>
+                                  <button class="book-button" onclick="bookPG('${pg.name}')">Book</button>`;
+                pgListingSection.appendChild(pgItem);
+            });
+        }
+
+        function bookPG(pgName) {
+    // Store the selected PG details in localStorage to access on the next page
+    localStorage.setItem('selectedPG', JSON.stringify(pgData.find(pg => pg.name === pgName)));
+
+    // Redirect the user to the details page
+    window.location.href = 'pg_details.html';
+    }
+        
+
+        // Event listeners for filter changes
+        accommodationTypeFilter.addEventListener('change', renderPGListings);
+        priceFilter.addEventListener('change', renderPGListings);
+        locationFilter.addEventListener('change', renderPGListings);
+        amenitiesFilter.addEventListener('change', renderPGListings);
+        preferredFilter.addEventListener('change', renderPGListings);
+        foodFilter.addEventListener('change', renderPGListings);
+
+        // Initial render
+        renderPGListings();
+    </script>
+</body>
+</html>

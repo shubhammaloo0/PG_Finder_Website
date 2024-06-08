@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PG Owner Interface</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            background: url('image/light_background-wallpaper-2048x1152.jpg') center/cover no-repeat fixed;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 50%;
+            margin: 20px 0; /* Added top and bottom margin */
+        }
+
+        #pgForm {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            height: 100%;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            text-align: left;
+            font-weight: bold;
+         } 
+
+        input, select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+       #amenitiesContainer {
+            margin-top: 10px;
+        }
+
+        #amenitiesContainer label{
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: normal;
+        } 
+
+        #imagePreview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #imagePreview img {
+            max-width: 100%;
+            max-height: 100px;
+            margin-top: 10px;
+        }
+
+        #terms {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        button {
+            background: linear-gradient(to right,rgb(173, 145, 211), rgb(74, 166, 242));
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: linear-gradient(to right,rgb(168, 152, 189), rgb(51, 151, 234));
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="pgForm">
+        <h2>PG Description</h2>
+        <form id="ownerForm" action="http://localhost:5000/storeFormData" method="post">
+            <label for="pgName">PG Name:</label>
+            <input type="text" id="pgName" name="pgName" required>
+
+            <label for="accommodation">Accommodation Type:</label>
+            <select id="accommodation" name="accommodation" required>
+                <option value="single">Single Sharing</option>
+                <option value="double">Double Sharing</option>
+                <option value="triple">Triple Sharing</option>
+            </select>
+
+            <label for="preferred">Preferred:</label>
+            <select id="preferred" name="preferred" required>
+                <option value="boys">Boys</option>
+                <option value="girls">Girls</option>
+            </select>
+
+            <label for="food">With or Without Food:</label>
+            <select id="food" name="food" required>
+                <option value="with">With Food</option>
+                <option value="without">Without Food</option>
+            </select>
+
+            <label>Amenities:</label>
+            <div id="amenitiesContainer">
+                <label for="washingMachine">
+                    <input type="checkbox" id="washingMachine" name="amenities" value="washingMachine">
+                    Washing Machine
+                </label>
+
+                <label for="airConditioner">
+                    <input type="checkbox" id="airConditioner" name="amenities" value="airConditioner">
+                    Air Conditioner
+                </label>
+
+                <label for="geyser">
+                    <input type="checkbox" id="geyser" name="amenities" value="geyser">
+                    Geyser
+                </label>
+            </div>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" required>
+
+            <label for="roomno">No of Room Available:</label>
+            <input type="number" id="roomno" name="roomno" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="images">Drag and Drop Images:</label>
+            <input type="file" id="images" name="images" accept="image/*" multiple>
+            <div id="imagePreview"></div>
+
+            <!-- <label for="termsCheckbox">Terms and Conditions:</label>
+            <div id="terms">
+              <label for="termsCheckbox">
+                  <input type="checkbox" id="termsCheckbox" required>
+                  I accept all the terms and condition.
+              </label>
+            </div> -->
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('images').addEventListener('change', function (event) {
+        const previewContainer = document.getElementById('imagePreview');
+        previewContainer.innerHTML = '';
+
+        const files = event.target.files;
+
+        for (const file of files) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    document.getElementById('ownerForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = {
+            pgName: document.getElementById('pgName').value,
+            accommodation: document.getElementById('accommodation').value,
+            preferred: document.getElementById('preferred').value,
+            food: document.getElementById('food').value,
+            amenities: Array.from(document.querySelectorAll('input[name="amenities"]:checked')).map(checkbox => checkbox.value),
+            location: document.getElementById('location').value,
+            price: document.getElementById('price').value,
+            roomno: document.getElementById('roomno').value,
+            // Add more fields as needed
+        };
+
+        try {
+            const response = await fetch('http://localhost:5000/storeFormData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                console.log('Form data stored successfully.');
+                
+                // Optionally, reset the form
+                document.getElementById('ownerForm').reset();
+
+                // Optionally, clear the image preview container
+                document.getElementById('imagePreview').innerHTML = '';
+
+                // Optionally, show a success message to the user
+            } else {
+                console.error('Failed to store form data.');
+                // Handle error, show an error message, etc.
+            }
+        } catch (error) {
+            console.error('Error storing form data:', error);
+            // Handle error, show an error message, etc.
+        }
+    });
+
+// ... (your existing JavaScript) ...
+
+
+
+</script>
+
+</body>
+</html>
